@@ -1,7 +1,7 @@
 const router=require("express").Router()
 const jwt=require("jsonwebtoken")
 const bcrypt=require("bcryptjs")
-const User=require("../models/user")
+const User=require("../models/user.model")
 require('dotenv').config()
 const { asyncHandler } = require("../utils/asyncHandler")
 

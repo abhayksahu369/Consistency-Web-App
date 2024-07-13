@@ -1,7 +1,7 @@
 const express=require("express");
 const app=express()
-const authRoute=require("./routes/auth")
-
+const authRoute=require("./routes/auth.route")
+const taskRoute=require("./routes/task.route")
 
 
 const {connectdb}=require("./utils/dbConfig");
@@ -12,6 +12,7 @@ app.use(express.urlencoded({extended:true}))
 app.use(cookieParser())
 
 app.use("/auth",authRoute)
+app.use("/task",taskRoute)
 
 
 app.listen(5000,()=>{

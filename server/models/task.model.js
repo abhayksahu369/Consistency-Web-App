@@ -13,9 +13,9 @@ const logSchema=new mongoose.Schema({
         required:true
     },
     date:{
-        type:Date,
+        type:String,
         required:true,
-        default: () => getIndianTime(Date.now())
+        default: () => getIndianTime(Date.now()).toISOString().split("T")[0]
     },
     hours:{
         type:Number,

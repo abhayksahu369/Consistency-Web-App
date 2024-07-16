@@ -7,20 +7,29 @@ import TaskCard from "./TaskCard";
 
 export default function HomePage() {
  const [tasks,setTasks]=useState([])
+ const [goodTasks,setGoodTasks]=useState([])
+ const [badTasks,setBadTasks]=useState([])
   
   
   useEffect(()=>{
     getTasks()
   },[])
   
-  
+  useEffect(()=>{
+    const good=tasks.filter((task)=>{
+      return task?.type=="good"
+    })
+    const bad=tasks.filter((task)=>{
+      return task?.type=="bad"
+    })
+    setGoodTasks(good)
+    setBadTasks(bad)
+  },[tasks])
   
   const getTasks=async()=>{
         let result=await axios.get("http://localhost:5000/task/get-all-tasks",{
           withCredentials:true
         })
-        console.log(result)
-        console.log(result.data.tasks)
         setTasks(result.data.tasks)
     
   }
@@ -30,19 +39,27 @@ export default function HomePage() {
     <div>
       <h1>Tasks</h1>
       {
-           console.log(tasks)
-      }
-      {
-     
-        
-        tasks.length>0?(
-            tasks.map((task)=>{
+    
+       goodTasks.length>0?(
+            goodTasks.map((task)=>{
                 return <TaskCard key={task._id} task={task}/>
             })):
             (
                 <></>
             )
       }
+      
+      {
+    
+        badTasks.length>0?(
+             badTasks.map((task)=>{
+                 return <TaskCard key={task._id} task={task}/>
+             })
+             ):
+             (
+                 <></>
+             )
+       }
     </div>
   );
 }

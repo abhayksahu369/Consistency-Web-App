@@ -43,13 +43,13 @@ const taskSchema=new mongoose.Schema({
     },
     maxStreak:{
         start:{
-            type:Date,
-            default:()=>getIndianTime(Date.now()),
+            type:String,
+            default:()=>getIndianTime(Date.now()).toISOString().split("T")[0],
             required:true
         },
         end:{
-            type:Date,
-            default:()=>getIndianTime(Date.now()),
+            type:String,
+            default:()=>getIndianTime(Date.now()).toISOString().split("T")[0],
             required:true
         },
         days:{
@@ -60,13 +60,13 @@ const taskSchema=new mongoose.Schema({
     },
     currentStreak:{
         start:{
-            type:Date,
-            default:()=>getIndianTime(Date.now()),
+            type:String,
+            default:getIndianTime(Date.now()).toISOString().split("T")[0],
             required:true
         },
         end:{
-            type:Date,
-            default:()=>getIndianTime(Date.now()),
+            type:String,
+            default:()=>getIndianTime(Date.now()).toISOString().split("T")[0],
             required:true
         },
         days:{

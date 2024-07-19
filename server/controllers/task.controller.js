@@ -229,4 +229,18 @@ const getAllTasksAndLogs = asyncHandler(async (req, res) => {
 
 
 
-module.exports = { createTask, getAllTask, getTask, updateTaskHours, getAllTasksAndLogs, getTasksByDate }
+const updatedTaskDetails=asyncHandler(async(req,res)=>{
+    const {name,description,type}=req.body
+    const {taskId}=req.params;
+    const updatedTask=await Task.findByIdAndUpdate(taskId,{name,description,type},{new:true}).select("name description type");
+    return res.status(200).json({updatedTask,success:true})
+
+})
+
+const deleteTask=asyncHandler(async(req,res)=>{
+    const {taskId}=req.params;
+    await Task.findByIdAndDelete(taskId);
+    return res.status(200).json({message:"task deleted",success:true})
+})
+
+module.exports = { createTask, getAllTask, getTask, updateTaskHours, getAllTasksAndLogs, getTasksByDate,updatedTaskDetails,deleteTask }

@@ -13,9 +13,10 @@ export default function RootLayout({ children }) {
           rel="stylesheet"
         />
       </head>
-      <body >
+      <body className="bg-gray-900">
         <Navbar />
-        {children}</body>
+        {children}
+        </body>
       {/* <Toaster/> */}
     </html>
   );

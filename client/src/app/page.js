@@ -18,6 +18,7 @@ export default function HomePage() {
   useEffect(() => {
     // getTasks()
     setGoodTasks([1,23,242,42,1,7,8,8,8])
+    setBadTasks([1])
   }, [])
 
   // useEffect(() => {
@@ -47,8 +48,8 @@ export default function HomePage() {
         <h3  className=" text-white  text-m font-thin">Your daily tasks</h3>
       </div>
       <div className=" mt-6 h-10 flex text-white font-bold cursor-pointer" >
-        <button className={ `${tab==="build-habits"?"font-extrabold text-lg":"font-semibold text-gray-400"} h-full w-1/2 flex items-center justify-center border-r `} onClick={()=>setTab("build-habits")}> BUILD HABITS</button>
-        <button className={ `${tab==="break-habits"?"font-extrabold text-lg":"font-semibold text-gray-400"} h-full w-1/2 flex items-center justify-center border-l `} onClick={()=>setTab("break-habits")}>BREAK HABITS</button>
+        <button className={ `${tab==="build-habits"?"font-extrabold ":"font-semibold text-gray-400"} h-full w-1/2 flex items-center justify-center border-r `} onClick={()=>setTab("build-habits")}> BUILD HABITS</button>
+        <button className={ `${tab==="break-habits"?"font-extrabold ":"font-semibold text-gray-400"} h-full w-1/2 flex items-center justify-center border-l `} onClick={()=>setTab("break-habits")}>BREAK HABITS</button>
 
       </div>
       

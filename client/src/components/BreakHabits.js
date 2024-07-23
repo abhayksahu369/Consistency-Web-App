@@ -1,4 +1,5 @@
 import React from 'react'
+import TaskCard from "@/components/TaskCard";
 
 export default function BreakHabits({ badTasks }) {
     return (

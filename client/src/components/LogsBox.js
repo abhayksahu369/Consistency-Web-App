@@ -1,4 +1,5 @@
 import React from 'react'
+import { changeDateFormat } from '@/lib/utils';
 
 export default function LogsBox({ logs }) {
     return (
@@ -10,12 +11,12 @@ export default function LogsBox({ logs }) {
                     <h3 className='w-1/2  text-center'>Hours</h3>
                 </div>
 
-                <div className='h-44 overflow-y-auto'>
+                <div className='max-h-56 overflow-y-auto'>
                 
                         {
                             logs.map(log => (
-                                <div className='border-b p-2 flex justify-between text-gray-400 '>
-                                    <h3 className='w-1/2  text-center'>{log.date}</h3>
+                                <div className='border-b p-2 flex justify-between text-gray-400 ' key={log._id}>
+                                    <h3 className='w-1/2  text-center'>{changeDateFormat(log.date)}</h3>
                                     <h3 className='w-1/2  text-center'>{log.hours}</h3>
                                 </div>
 

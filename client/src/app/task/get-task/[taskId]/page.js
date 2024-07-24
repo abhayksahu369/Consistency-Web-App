@@ -45,7 +45,7 @@ export default function TaskPage() {
           <h5 className="text-gray-500 text-left">dsa</h5>
           <h3 className="text-white text-right mt-6">Pending..</h3>
       </div>
-      <StreakBox data={data}/>
+      <StreakBox data={data} task={task}/>
       <LogsBox logs={logs}/>
 
     </div>

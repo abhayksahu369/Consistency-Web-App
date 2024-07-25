@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import TaskCard from "@/components/TaskCard";
 import BuildHabits from "@/components/BuildHabits";
 import BreakHabits from "@/components/BreakHabits";
-import CreateTaskModal from "@/components/CreateTaskModal";
+import UpdateTaskModal from "@/components/modals/UpdateTaskModal"
 
 
 
@@ -15,34 +15,35 @@ export default function HomePage() {
   const [badTasks, setBadTasks] = useState([])
   const [tab,setTab]=useState("build-habits")
   const [showModal,setShowModal]=useState(false)
+  const [taskId,setTaskId]=useState("")
    
 
 
   useEffect(() => {
-    // getTasks()
-    setGoodTasks([1,23,242,42,1,7,8,8,8])
-    setBadTasks([1])
+    getTasks()
   }, [])
 
-  // useEffect(() => {
-  //   const good = tasks.filter((task) => {
-  //     return task?.type == "good"
-  //   })
-  //   const bad = tasks.filter((task) => {
-  //     return task?.type == "bad"
-  //   })
-  //   setGoodTasks(good)
-  //   setBadTasks(bad)
-  // }, [tasks])
+  useEffect(() => {
+    const good = tasks.filter((task) => {
+      return task?.type == "good"
+    })
+    const bad = tasks.filter((task) => {
+      return task?.type == "bad"
+    })
+    setGoodTasks(good)
+    setBadTasks(bad)
+  }, [tasks])
 
-  // const getTasks = async () => {
-  //   let result = await axios.get("http://localhost:5000/task/get-all-tasks", {
-  //     withCredentials: true
-  //   })
-  //   setTasks(result.data.tasks)
+  const getTasks = async () => {
+    let result = await axios.get("http://localhost:5000/task/get-all-tasks", {
+      withCredentials: true
+    })
+    setTasks(result.data.tasks)
 
-  // }
-  const handleModal=()=>{
+  }
+  const handleModal=(id)=>{
+    console.log(id)
+       setTaskId(id)
       setShowModal(!showModal)
   }
 
@@ -51,7 +52,7 @@ export default function HomePage() {
     <div className="h-full w-full bg-gray-900 relative ">
       
       {
-        showModal?<CreateTaskModal handleModal={handleModal}/>:<></>
+        showModal?<UpdateTaskModal handleModal={handleModal} taskId={taskId}/>:<></>
       }
       <div className=" pl-5 ">
         <h1 className="text-7xl  text-white font-extrabold" >Gear Up!</h1>

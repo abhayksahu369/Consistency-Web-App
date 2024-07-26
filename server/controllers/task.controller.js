@@ -6,7 +6,10 @@ const jwt = require("jsonwebtoken")
 
 
 const createTask = asyncHandler(async (req, res) => {
-    const { name, description, userId, type } = req.body
+    const token = req.cookies.accessToken
+    const result = jwt.verify(token, process.env.JWT_SECRET_KEY)
+    const userId = result.id
+    const { name, description, type } = req.body
     if (!(name && description && userId)) {
         return res.status(400).json({ message: "all fields are required", success: false })
     }
@@ -23,10 +26,30 @@ const getAllTask = asyncHandler(async (req, res) => {
     const token = req.cookies.accessToken
     const result = jwt.verify(token, process.env.JWT_SECRET_KEY)
     const userId = result.id
-    if (!userId) {
-        return res.status(400).json({ message: "userId is required", success: false })
-    }
-    const tasks = await Task.find({ userId })
+    const tasks = await Task.aggregate(
+        [
+            {
+              $match: {
+                userId:new mongoose.Types.ObjectId(userId)
+              }
+            },
+            {
+              $lookup: {
+                from: "logs",
+                localField: "_id",
+                foreignField: "taskId",
+                as: "todayLog",
+                pipeline:[
+                  {
+                    $match:{
+                      date:getIndianTime(Date.now()).toISOString().split("T")[0]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+    )
     return res.status(200).json({ tasks, success: true })
 })
 
@@ -82,8 +105,11 @@ const getTask = asyncHandler(async (req, res) => {
 
 const updateTaskHours = asyncHandler(async (req, res) => {
     const taskId = req.params.id
-    const { hours, userId, isDone, date } = req.body
-    if (!(hours && userId && isDone)) {
+    const token = req.cookies.accessToken
+    const result = jwt.verify(token, process.env.JWT_SECRET_KEY)
+    const userId = result.id
+    const { hours,  isDone} = req.body
+    if (!(hours && isDone)) {
         return res.status(400).json({ message: "all fields are required", success: false })
     }
     let logs = await Log.find({ taskId })
@@ -94,27 +120,27 @@ const updateTaskHours = asyncHandler(async (req, res) => {
     let recentDate;
     if (logs === undefined || logs.length === 0) {
         console.log("undefinded")
-        recentDate = new Log({ taskId, userId, isDone, hours, date }) // remove the date
+        recentDate = new Log({ taskId, userId, isDone, hours }) // remove the date
         recentDate = await recentDate.save()
         days++
-        start = date //change the date
-        end = date  //change the date
+        start = getIndianTime(Date.now()).toISOString().split("T")[0] 
+        end = getIndianTime(Date.now()).toISOString().split("T")[0]
 
     } else {
         console.log("sort")
         logs.sort((a, b) => new Date(b.date) - new Date(a.date))
-        if (logs[0].date === date) { //remove the date
+        if (logs[0].date === getIndianTime(Date.now()).toISOString().split("T")[0]) { 
             console.log("if sort")
             recentDate = await Log.findByIdAndUpdate(logs[0]._id, { hours, isDone }, { new: true })
         } else {
             console.log("else sort")
-            recentDate = new Log({ taskId, userId, isDone, hours, date })//remove the date
+            recentDate = new Log({ taskId, userId, isDone, hours })
             recentDate = await recentDate.save()
 
             let yesterday = 0
-            if (new Date(date) - (new Date(end)) === 24 * 60 * 60 * 1000) { //change the date
+            if (new Date(getIndianTime(Date.now()).toISOString().split("T")[0]) - (new Date(end)) === 24 * 60 * 60 * 1000) { //change the date
                 days++;
-                end = date//change the date
+                end = getIndianTime(Date.now()).toISOString().split("T")[0]
                 if (days > maxDays) {
                     console.log("else if sort")
                     maxDays = days;
@@ -124,8 +150,8 @@ const updateTaskHours = asyncHandler(async (req, res) => {
             } else {
                 console.log("else else sort")
                 days = 1;
-                start = date  //change the date
-                end = date //change the date
+                start = getIndianTime(Date.now()).toISOString().split("T")[0]
+                end = getIndianTime(Date.now()).toISOString().split("T")[0]
             }
         }
 

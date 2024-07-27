@@ -24,6 +24,7 @@ export default function HomePage() {
   }, [])
 
   useEffect(() => {
+    console.log(tasks)
     const good = tasks.filter((task) => {
       return task?.type == "good"
     })
@@ -42,14 +43,13 @@ export default function HomePage() {
 
   }
   const handleModal=(id)=>{
-    console.log(id)
        setTaskId(id)
       setShowModal(!showModal)
   }
 
 
   return (
-    <div className="h-full w-full bg-gray-900 relative ">
+    <div className="h-full w-full bg-gray-900 relative  pb-20">
       
       {
         showModal?<UpdateTaskModal handleModal={handleModal} taskId={taskId}/>:<></>

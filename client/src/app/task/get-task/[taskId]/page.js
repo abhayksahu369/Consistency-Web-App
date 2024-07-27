@@ -6,12 +6,14 @@ import axios from "axios"
 import { useParams } from "next/navigation"
 import StreakBox from "@/components/StreakBox"
 import LogsBox from "@/components/LogsBox"
+import UpdateTaskModal from "@/components/modals/UpdateTaskModal"
 
 
 export default function TaskPage() {
   const [data, setData] = useState([])
   const [task, setTask] = useState({})
   const [logs, setLogs] = useState([])
+  const[showModal,setShowModal]=useState(false)
 
   const { taskId } = useParams();
 
@@ -38,12 +40,21 @@ export default function TaskPage() {
     setLogs(result.data.task.allLogs)
 
   }
+
+  const handleModal=()=>{
+      setShowModal(!showModal)
+  }
+
+
   return (
-    <div id="taskpage" className=" w-full">
+    <div id="taskpage" className=" w-full pb-20">
+      {
+        showModal?<UpdateTaskModal handleModal={handleModal} taskId={task._id}/>:<></>
+      }
       <div id="taskNameAndDesc" className="mt-3 px-4">
-          <h1 className="text-white capitalize text-6xl ">data structures and algorithm</h1>
-          <h5 className="text-gray-500 text-left">dsa</h5>
-          <h3 className="text-white text-right mt-6">Pending..</h3>
+          <h1 className="text-white capitalize text-6xl break-words ">{task.name}</h1>
+          <h5 className="text-gray-500 text-left break-words">{task.description}</h5>
+          <h3 className="text-white text-right mt-6" onClick={()=>handleModal()}>{task?.todayLog?"done":"pending.."}</h3>
       </div>
       <StreakBox data={data} task={task}/>
       <LogsBox logs={logs}/>

@@ -15,7 +15,7 @@ export default function TaskCard({ task,handleModal }) {
       </div>
       <div className="  flex justify-center items-center w-2/6 h-full">
         <div className=" w-full  h-2/3  items-center flex flex-col">
-          <h4 onClick={()=>handleModal(task._id)}>pending</h4>
+          <h4 onClick={()=>handleModal(task._id)}>{task.todayLog.length===0?"pending":"done"}</h4>
           <Link className="" href={`task/get-task/${task._id}`}><p className="text-gray-500 text-sm mt-4">view details</p></Link>
         </div>
       </div>
